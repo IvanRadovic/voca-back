@@ -1,0 +1,75 @@
+<?php
+
+use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CallController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\SavedCallController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Public routes
+|--------------------------------------------------------------------------
+*/
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register/nvo', [AuthController::class, 'registerNvo']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/stats', [DashboardController::class, 'platformStats']);
+
+Route::get('/calls', [CallController::class, 'index']);
+Route::get('/calls/{call}', [CallController::class, 'show']);
+Route::get('/calls/{call}/similar', [CallController::class, 'similar']);
+Route::get('/calls/{call}/feedbacks', [FeedbackController::class, 'index']);
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Profile
+    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::post('/profile', [ProfileController::class, 'update']); // multipart avatar upload
+    Route::put('/profile/nvo', [ProfileController::class, 'updateNvo']);
+
+    // Youth: personalized feed & applications
+    Route::get('/feed', [CallController::class, 'recommendations']);
+    Route::post('/calls/{call}/apply', [ApplicationController::class, 'store']);
+    Route::delete('/calls/{call}/apply', [ApplicationController::class, 'destroy']);
+    Route::get('/my/applications', [ApplicationController::class, 'myApplications']);
+
+    // Wishlist
+    Route::get('/my/saved', [SavedCallController::class, 'index']);
+    Route::post('/calls/{call}/save', [SavedCallController::class, 'toggle']);
+
+    // Feedback
+    Route::post('/calls/{call}/feedbacks', [FeedbackController::class, 'store']);
+    Route::get('/my/feedbacks', [FeedbackController::class, 'mine']);
+
+    /*
+    |----------------------------------------------------------------------
+    | NVO-only routes
+    |----------------------------------------------------------------------
+    */
+    Route::middleware('nvo')->group(function () {
+        Route::get('/nvo/stats', [DashboardController::class, 'nvoStats']);
+        Route::get('/nvo/calls', [CallController::class, 'myCalls']);
+        Route::post('/calls', [CallController::class, 'store']);
+        Route::put('/calls/{call}', [CallController::class, 'update']);
+        Route::post('/calls/{call}', [CallController::class, 'update']); // multipart image upload
+        Route::delete('/calls/{call}', [CallController::class, 'destroy']);
+
+        Route::get('/calls/{call}/applicants', [ApplicationController::class, 'applicants']);
+        Route::put('/applications/{application}/status', [ApplicationController::class, 'updateStatus']);
+        Route::post('/calls/{call}/announce', [ApplicationController::class, 'announce']);
+    });
+});
