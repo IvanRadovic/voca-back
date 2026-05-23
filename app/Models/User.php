@@ -29,6 +29,14 @@ class User extends Authenticatable
         'education_level',
         'avatar',
         'bio',
+        'headline',
+        'about',
+        'education',
+        'work_experience',
+        'skills',
+        'linkedin',
+        'phone',
+        'gender',
     ];
 
     protected $hidden = [
@@ -43,6 +51,12 @@ class User extends Authenticatable
             'date_of_birth' => 'date',
             'password' => 'hashed',
         ];
+    }
+
+    /** Age in years, or null when date of birth is unknown. */
+    public function getAgeAttribute(): ?int
+    {
+        return $this->date_of_birth ? (int) $this->date_of_birth->age : null;
     }
 
     public function isNvo(): bool

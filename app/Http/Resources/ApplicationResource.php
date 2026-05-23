@@ -22,6 +22,16 @@ class ApplicationResource extends JsonResource
                     'email' => $this->user->email,
                     'city' => $this->user->city,
                     'education_level' => $this->user->education_level,
+                    'age' => $this->user->age,
+                    'gender' => $this->user->gender,
+                    'headline' => $this->user->headline,
+                    'about' => $this->user->about,
+                    'education' => $this->user->education,
+                    'work_experience' => $this->user->work_experience,
+                    'skills' => $this->user->skills,
+                    'linkedin' => $this->user->linkedin,
+                    'phone' => $this->user->phone,
+                    'avatar' => $this->user->avatar ? asset('storage/'.$this->user->avatar) : null,
                     'interests' => CategoryResource::collection(
                         $this->user->relationLoaded('interests') ? $this->user->interests : collect()
                     ),

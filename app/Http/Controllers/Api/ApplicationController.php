@@ -12,6 +12,7 @@ use App\Notifications\CallAnnouncementNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ApplicationController extends Controller
 {
@@ -68,19 +69,73 @@ class ApplicationController extends Controller
     }
 
     /**
-     * Applicants for a call owned by the authenticated NVO.
+     * Applicants for a call owned by the authenticated NVO,
+     * with optional status filter, search and sorting.
      */
     public function applicants(Request $request, Call $call)
     {
         $this->authorizeOwner($request, $call);
 
-        $applications = Application::query()
-            ->where('call_id', $call->id)
-            ->with('user.interests')
-            ->latest()
-            ->paginate($request->integer('per_page', 25));
+        $applications = $this->applicantsQuery($request, $call)
+            ->paginate($request->integer('per_page', 25))
+            ->withQueryString();
 
         return ApplicationResource::collection($applications);
+    }
+
+    /**
+     * Export the applicants of a call as a CSV download.
+     */
+    public function exportApplicants(Request $request, Call $call): StreamedResponse
+    {
+        $this->authorizeOwner($request, $call);
+
+        $applications = $this->applicantsQuery($request, $call)->get();
+        $filename = 'applicants-call-'.$call->id.'-'.now()->format('Ymd').'.csv';
+
+        return response()->streamDownload(function () use ($applications) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['Name', 'Email', 'Age', 'City', 'Education', 'Phone', 'Status', 'Applied at']);
+            foreach ($applications as $app) {
+                fputcsv($out, [
+                    $app->user->name,
+                    $app->user->email,
+                    $app->user->age ?? '',
+                    $app->user->city ?? '',
+                    $app->user->education_level ?? '',
+                    $app->user->phone ?? '',
+                    $app->status,
+                    $app->created_at->toDateTimeString(),
+                ]);
+            }
+            fclose($out);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
+    /**
+     * Shared query builder for applicants listing + export.
+     */
+    private function applicantsQuery(Request $request, Call $call)
+    {
+        $query = Application::query()
+            ->where('call_id', $call->id)
+            ->with('user.interests')
+            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
+            ->when($request->filled('search'), function ($q) use ($request) {
+                $term = '%'.$request->string('search').'%';
+                $q->whereHas('user', fn ($sub) => $sub->where('name', 'like', $term)->orWhere('email', 'like', $term));
+            });
+
+        // Sorting. Age sorts via the applicant's date of birth.
+        return match ($request->string('sort')->value()) {
+            'oldest' => $query->oldest(),
+            'name' => $query->join('users', 'users.id', '=', 'applications.user_id')
+                ->orderBy('users.name')->select('applications.*'),
+            'age' => $query->join('users', 'users.id', '=', 'applications.user_id')
+                ->orderBy('users.date_of_birth')->select('applications.*'),
+            'status' => $query->orderBy('status'),
+            default => $query->latest(),
+        };
     }
 
     /**

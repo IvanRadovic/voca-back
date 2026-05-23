@@ -190,6 +190,13 @@ class DatabaseSeeder extends Seeder
                     'city' => $y['city'],
                     'date_of_birth' => Carbon::now()->subYears(rand(16, 29)),
                     'education_level' => collect(['high_school', 'undergraduate', 'bachelor', 'master'])->random(),
+                    'gender' => collect(['male', 'female', 'undisclosed'])->random(),
+                    'headline' => 'Motivated young person from '.$y['city'],
+                    'about' => 'I am passionate about learning new things and contributing to my community. Always looking for opportunities to grow.',
+                    'education' => 'Faculty of Social Sciences, University of Montenegro (ongoing).',
+                    'work_experience' => 'Volunteer at a local youth center; part-time internship in a small team.',
+                    'skills' => 'Teamwork, communication, English (B2), basic project management.',
+                    'linkedin' => 'https://www.linkedin.com/in/example',
                     'email_verified_at' => now(),
                 ]
             );

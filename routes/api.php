@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CallController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\NvoController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SavedCallController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::get('/calls', [CallController::class, 'index']);
 Route::get('/calls/{call}', [CallController::class, 'show']);
 Route::get('/calls/{call}/similar', [CallController::class, 'similar']);
 Route::get('/calls/{call}/feedbacks', [FeedbackController::class, 'index']);
+
+Route::get('/nvos/{nvo}', [NvoController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::middleware('nvo')->group(function () {
         Route::get('/nvo/stats', [DashboardController::class, 'nvoStats']);
+        Route::get('/nvo/analytics', [DashboardController::class, 'nvoAnalytics']);
         Route::get('/nvo/calls', [CallController::class, 'myCalls']);
         Route::post('/calls', [CallController::class, 'store']);
         Route::put('/calls/{call}', [CallController::class, 'update']);
@@ -69,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/calls/{call}', [CallController::class, 'destroy']);
 
         Route::get('/calls/{call}/applicants', [ApplicationController::class, 'applicants']);
+        Route::get('/calls/{call}/applicants/export', [ApplicationController::class, 'exportApplicants']);
         Route::put('/applications/{application}/status', [ApplicationController::class, 'updateStatus']);
         Route::post('/calls/{call}/announce', [ApplicationController::class, 'announce']);
     });
