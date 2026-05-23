@@ -35,6 +35,7 @@ class CallResource extends JsonResource
             'nvo' => $this->whenLoaded('nvo', function () {
                 return [
                     'id' => $this->nvo->id,
+                    'nvo_id' => optional($this->nvo->nvo)->id,
                     'name' => $this->nvo->name,
                     'organization_name' => optional($this->nvo->nvo)->organization_name ?? $this->nvo->name,
                     'verified' => (bool) optional($this->nvo->nvo)->verified,
