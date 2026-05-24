@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\Api\AssistantController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CallController;
 use App\Http\Controllers\Api\CategoryController;
@@ -66,6 +67,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my/feedbacks', [FeedbackController::class, 'mine']);
     Route::get('/my/certificates', [CertificateController::class, 'mine']);
     Route::get('/me/gamification', [GamificationController::class, 'me']);
+
+    // AI assistant
+    Route::post('/ai/cover-letter', [AssistantController::class, 'coverLetter']);
+    Route::post('/ai/cv', [AssistantController::class, 'cv']);
+    Route::post('/ai/assistant', [AssistantController::class, 'chat']);
 
     /*
     |----------------------------------------------------------------------
