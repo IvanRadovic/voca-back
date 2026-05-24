@@ -119,6 +119,11 @@ class CallController extends Controller
                 Storage::disk('public')->delete($call->image);
             }
             $data['image'] = $request->file('image')->store('calls', 'public');
+        } elseif ($request->boolean('remove_image')) {
+            if ($call->image) {
+                Storage::disk('public')->delete($call->image);
+            }
+            $data['image'] = null;
         }
 
         $categories = $data['categories'] ?? null;
