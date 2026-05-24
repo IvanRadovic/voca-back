@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CallController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CertificateController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\NvoController;
@@ -29,6 +30,9 @@ Route::get('/calls/{call}/similar', [CallController::class, 'similar']);
 Route::get('/calls/{call}/feedbacks', [FeedbackController::class, 'index']);
 
 Route::get('/nvos/{nvo}', [NvoController::class, 'show']);
+
+Route::get('/certificates/{code}', [CertificateController::class, 'show']);
+Route::get('/certificates/{code}/pdf', [CertificateController::class, 'download']);
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Feedback
     Route::post('/calls/{call}/feedbacks', [FeedbackController::class, 'store']);
     Route::get('/my/feedbacks', [FeedbackController::class, 'mine']);
+    Route::get('/my/certificates', [CertificateController::class, 'mine']);
 
     /*
     |----------------------------------------------------------------------

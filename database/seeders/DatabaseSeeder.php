@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Application;
 use App\Models\Call;
 use App\Models\Category;
+use App\Models\Certificate;
 use App\Models\Feedback;
 use App\Models\Nvo;
 use App\Models\User;
@@ -227,6 +228,8 @@ class DatabaseSeeder extends Seeder
                 ['call_id' => $finishedCall->id, 'user_id' => $youth->id],
                 ['status' => Application::STATUS_COMPLETED]
             );
+
+            Certificate::issueFor($youth->id, $finishedCall->id);
 
             Feedback::updateOrCreate(
                 ['call_id' => $finishedCall->id, 'user_id' => $youth->id],

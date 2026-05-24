@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
 use App\Models\Call;
+use App\Models\Certificate;
 use App\Notifications\ApplicationReceivedNotification;
 use App\Notifications\ApplicationStatusNotification;
 use App\Notifications\CallAnnouncementNotification;
@@ -155,6 +156,12 @@ class ApplicationController extends Controller
         ]);
 
         $application->update($data);
+
+        // Completing an application issues a certificate of participation.
+        if ($data['status'] === Application::STATUS_COMPLETED) {
+            Certificate::issueFor($application->user_id, $application->call_id);
+        }
+
         $application->user->notify(new ApplicationStatusNotification($application->load('call')));
 
         return new ApplicationResource($application->load('user.interests'));
