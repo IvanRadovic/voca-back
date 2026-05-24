@@ -18,10 +18,12 @@ class CallController extends Controller
     {
         $query = $this->baseQuery($request);
 
-        // Browse only shows active calls by default.
+        // Browse only shows active calls by default; status=all returns every call.
         $query->when(
             $request->filled('status'),
-            fn ($q) => $q->where('status', $request->string('status')),
+            fn ($q) => $request->string('status') == 'all'
+                ? $q
+                : $q->where('status', $request->string('status')),
             fn ($q) => $q->where('status', Call::STATUS_ACTIVE),
         );
 

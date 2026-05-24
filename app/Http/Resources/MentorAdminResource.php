@@ -24,6 +24,7 @@ class MentorAdminResource extends JsonResource
             'email' => $this->email,
             'linkedin' => $this->linkedin,
             'is_active' => (bool) $this->is_active,
+            'call_ids' => $this->relationLoaded('calls') ? $this->calls->pluck('id') : [],
             'created_at' => $this->created_at,
         ];
     }

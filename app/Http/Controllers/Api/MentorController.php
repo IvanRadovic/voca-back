@@ -18,6 +18,7 @@ class MentorController extends Controller
     public function index(Request $request)
     {
         $mentors = Mentor::where('is_active', true)
+            ->with('calls.feedbacks')
             ->when($request->filled('search'), function ($q) use ($request) {
                 $term = '%'.$request->string('search').'%';
                 $q->where(fn ($sub) => $sub->where('name', 'like', $term)
@@ -33,6 +34,8 @@ class MentorController extends Controller
     public function show(Mentor $mentor)
     {
         abort_unless($mentor->is_active, 404);
+
+        $mentor->load(['calls.feedbacks.user']);
 
         return new MentorResource($mentor);
     }
@@ -82,7 +85,7 @@ class MentorController extends Controller
 
     public function adminIndex()
     {
-        return MentorAdminResource::collection(Mentor::latest()->get());
+        return MentorAdminResource::collection(Mentor::with('calls')->latest()->get());
     }
 
     public function store(Request $request)
@@ -94,7 +97,10 @@ class MentorController extends Controller
             $data['avatar'] = $request->file('avatar')->store('mentors', 'public');
         }
 
-        return new MentorAdminResource(Mentor::create($data));
+        $mentor = Mentor::create($data);
+        $this->syncCalls($request, $mentor);
+
+        return new MentorAdminResource($mentor->load('calls'));
     }
 
     public function update(Request $request, Mentor $mentor)
@@ -112,8 +118,27 @@ class MentorController extends Controller
         }
 
         $mentor->update($data);
+        $this->syncCalls($request, $mentor);
 
-        return new MentorAdminResource($mentor->fresh());
+        return new MentorAdminResource($mentor->fresh('calls'));
+    }
+
+    /**
+     * Sync linked opportunities when the admin form submits a call selection.
+     * The sync_calls flag lets an empty selection clear all links.
+     */
+    private function syncCalls(Request $request, Mentor $mentor): void
+    {
+        if (! $request->boolean('sync_calls')) {
+            return;
+        }
+
+        $validated = $request->validate([
+            'call_ids' => ['array'],
+            'call_ids.*' => ['integer', 'exists:calls,id'],
+        ]);
+
+        $mentor->calls()->sync($validated['call_ids'] ?? []);
     }
 
     public function destroy(Mentor $mentor)

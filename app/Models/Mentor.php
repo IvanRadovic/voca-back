@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Mentor extends Model
@@ -19,5 +20,15 @@ class Mentor extends Model
     public function requests(): HasMany
     {
         return $this->hasMany(MentorshipRequest::class);
+    }
+
+    /**
+     * Opportunities this mentor hosts or has hosted (speaker / host / mentor).
+     */
+    public function calls(): BelongsToMany
+    {
+        return $this->belongsToMany(Call::class, 'call_mentor')
+            ->withPivot('role')
+            ->withTimestamps();
     }
 }
