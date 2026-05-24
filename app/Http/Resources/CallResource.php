@@ -48,6 +48,9 @@ class CallResource extends JsonResource
             'has_applied' => $user
                 ? $this->whenLoaded('applications', fn () => $this->applications->contains('user_id', $user->id))
                 : false,
+            'my_application_status' => $user
+                ? $this->whenLoaded('applications', fn () => optional($this->applications->firstWhere('user_id', $user->id))->status)
+                : null,
             'created_at' => $this->created_at,
         ];
     }

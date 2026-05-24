@@ -78,6 +78,11 @@ class Call extends Model
         return $this->hasMany(Feedback::class);
     }
 
+    public function stories(): HasMany
+    {
+        return $this->hasMany(Story::class);
+    }
+
     public function savedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'saved_calls')->withTimestamps();

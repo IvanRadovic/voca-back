@@ -62,7 +62,7 @@ class CallController extends Controller
             'nvo.nvo',
             'feedbacks.user',
             'savedByUsers' => fn ($q) => $q->select('users.id'),
-            'applications' => fn ($q) => $q->select('id', 'call_id', 'user_id'),
+            'applications' => fn ($q) => $q->select('id', 'call_id', 'user_id', 'status'),
         ])->loadCount('applications')->loadAvg('feedbacks', 'rating');
 
         return new CallResource($call);

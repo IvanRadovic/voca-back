@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\Call;
 use App\Models\Category;
 use App\Models\Certificate;
+use App\Models\Story;
 use App\Models\Feedback;
 use App\Models\Nvo;
 use App\Models\User;
@@ -230,6 +231,11 @@ class DatabaseSeeder extends Seeder
             );
 
             Certificate::issueFor($youth->id, $finishedCall->id);
+
+            Story::updateOrCreate(
+                ['user_id' => $youth->id, 'call_id' => $finishedCall->id],
+                ['body' => 'Nezaboravno iskustvo! Naučio/la sam puno, upoznao/la sjajne ljude i stekao/la nove vještine. Preporučujem svakom mladom čovjeku.']
+            );
 
             Feedback::updateOrCreate(
                 ['call_id' => $finishedCall->id, 'user_id' => $youth->id],

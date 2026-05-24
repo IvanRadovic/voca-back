@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\GamificationController;
 use App\Http\Controllers\Api\NvoController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SavedCallController;
+use App\Http\Controllers\Api\StoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,9 @@ Route::get('/certificates/{code}', [CertificateController::class, 'show']);
 Route::get('/certificates/{code}/pdf', [CertificateController::class, 'download']);
 
 Route::get('/leaderboard', [GamificationController::class, 'leaderboard']);
+
+Route::get('/calls/{call}/stories', [StoryController::class, 'index']);
+Route::get('/stories/recent', [StoryController::class, 'recent']);
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +70,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/calls/{call}/feedbacks', [FeedbackController::class, 'store']);
     Route::get('/my/feedbacks', [FeedbackController::class, 'mine']);
     Route::get('/my/certificates', [CertificateController::class, 'mine']);
+    Route::get('/my/stories', [StoryController::class, 'mine']);
+    Route::post('/calls/{call}/stories', [StoryController::class, 'store']);
     Route::get('/me/gamification', [GamificationController::class, 'me']);
 
     // AI assistant
