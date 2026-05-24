@@ -9,6 +9,7 @@ use App\Models\Certificate;
 use App\Models\Story;
 use App\Models\Feedback;
 use App\Models\Nvo;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -241,6 +242,36 @@ class DatabaseSeeder extends Seeder
                 ['call_id' => $finishedCall->id, 'user_id' => $youth->id],
                 ['rating' => rand(4, 5), 'comment' => 'Great experience, learned a lot and met amazing people!']
             );
+        }
+
+        // ---- Editorial content (resources + blog) ----
+        $author = User::where('email', 'admin@voca.test')->first();
+        $posts = [
+            ['type' => 'resource', 'title' => 'How to write a great CV', 'excerpt' => 'A simple template and tips to build your first CV.',
+                'body' => "## Your first CV\n\nA good CV is **clear and concise**. Include:\n\n- Contact details\n- A short summary\n- Education\n- Experience & volunteering\n- Skills\n\n> Tip: tailor it to each opportunity."],
+            ['type' => 'resource', 'title' => 'Writing a motivation letter', 'excerpt' => 'Structure your letter in three short paragraphs.',
+                'body' => "## Motivation letter\n\n1. **Why this opportunity** — show genuine interest.\n2. **Why you** — your skills and experience.\n3. **What you bring** — your motivation and goals.\n\nKeep it under one page."],
+            ['type' => 'resource', 'title' => 'Applying for Erasmus+', 'excerpt' => 'Everything you need to start your Erasmus+ journey.',
+                'body' => "## Erasmus+\n\nErasmus+ funds youth exchanges, training and volunteering across Europe.\n\n- Find an accredited organization\n- Prepare your CV and motivation\n- Apply early — deadlines fill up!"],
+            ['type' => 'blog', 'title' => 'Top 5 summer camps for youth in 2026', 'excerpt' => 'Our picks for an unforgettable, useful summer.',
+                'body' => "## Make the most of summer\n\nFrom coding camps to coastal clean-ups, here are five experiences worth your time this summer. Each builds skills **and** friendships."],
+            ['type' => 'blog', 'title' => 'How a workshop changed my path', 'excerpt' => 'A participant shares how one weekend opened new doors.',
+                'body' => "## A weekend that mattered\n\n"."\"I joined a startup weekend with zero experience and left with a team and a plan.\" — these moments are why Voca exists."],
+        ];
+        if ($author) {
+            foreach ($posts as $i => $p) {
+                Post::updateOrCreate(
+                    ['slug' => \Illuminate\Support\Str::slug($p['title'])],
+                    [
+                        'author_id' => $author->id,
+                        'type' => $p['type'],
+                        'title' => $p['title'],
+                        'excerpt' => $p['excerpt'],
+                        'body' => $p['body'],
+                        'published_at' => now()->subDays($i),
+                    ]
+                );
+            }
         }
     }
 }

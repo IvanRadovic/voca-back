@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\GamificationController;
 use App\Http\Controllers\Api\NvoController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SavedCallController;
 use App\Http\Controllers\Api\StoryController;
@@ -41,6 +42,9 @@ Route::get('/leaderboard', [GamificationController::class, 'leaderboard']);
 
 Route::get('/calls/{call}/stories', [StoryController::class, 'index']);
 Route::get('/stories/recent', [StoryController::class, 'recent']);
+
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +89,12 @@ Route::middleware('auth:sanctum')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::middleware('nvo')->group(function () {
+        Route::get('/my/posts', [PostController::class, 'mine']);
+        Route::post('/posts', [PostController::class, 'store']);
+        Route::post('/posts/{post}', [PostController::class, 'update']); // multipart
+        Route::put('/posts/{post}', [PostController::class, 'update']);
+        Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+
         Route::get('/nvo/stats', [DashboardController::class, 'nvoStats']);
         Route::get('/nvo/analytics', [DashboardController::class, 'nvoAnalytics']);
         Route::get('/nvo/calls', [CallController::class, 'myCalls']);
