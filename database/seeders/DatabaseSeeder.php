@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Hand-picked Unsplash stock photos (free, no attribution required).
+        $img = fn (string $id) => "https://images.unsplash.com/photo-{$id}?auto=format&fit=crop&w=1200&h=675&q=70";
+
         $this->call(CategorySeeder::class);
 
         $categories = Category::all()->keyBy('slug');
@@ -50,6 +53,7 @@ class DatabaseSeeder extends Seeder
                         'is_online' => true,
                         'location' => 'Online',
                         'price' => 0,
+                        'image' => $img('1461749280684-dccba630e2f6'),
                     ],
                     [
                         'title' => 'Startup Weekend Podgorica',
@@ -59,6 +63,7 @@ class DatabaseSeeder extends Seeder
                         'is_online' => false,
                         'location' => 'Podgorica, Montenegro',
                         'price' => 15,
+                        'image' => $img('1522071820081-009f0129c71c'),
                     ],
                 ],
             ],
@@ -75,6 +80,7 @@ class DatabaseSeeder extends Seeder
                         'is_online' => false,
                         'location' => 'Ulcinj, Montenegro',
                         'price' => 0,
+                        'image' => $img('1618477388954-7852f32655ec'),
                     ],
                     [
                         'title' => 'Sustainability Seminar',
@@ -84,6 +90,7 @@ class DatabaseSeeder extends Seeder
                         'is_online' => true,
                         'location' => 'Online',
                         'price' => 0,
+                        'image' => $img('1441974231531-c6227db76b6e'),
                     ],
                 ],
             ],
@@ -100,6 +107,7 @@ class DatabaseSeeder extends Seeder
                         'is_online' => false,
                         'location' => 'Kotor, Montenegro',
                         'price' => 25,
+                        'image' => $img('1452587925148-ce544e77e70d'),
                     ],
                     [
                         'title' => 'Creative Writing Mentorship',
@@ -109,6 +117,7 @@ class DatabaseSeeder extends Seeder
                         'is_online' => true,
                         'location' => 'Online',
                         'price' => 0,
+                        'image' => $img('1455390582262-044cdead277a'),
                     ],
                 ],
             ],
@@ -144,6 +153,7 @@ class DatabaseSeeder extends Seeder
                     [
                         'subtitle' => $c['subtitle'],
                         'description' => "<p>{$c['subtitle']}.</p><p>This opportunity is open to motivated young people aged 15-30. Limited spots available, so apply early!</p><ul><li>Hands-on sessions</li><li>Certificate of participation</li><li>Networking with peers</li></ul>",
+                        'image' => $c['image'] ?? null,
                         'type' => $c['type'],
                         'application_deadline' => Carbon::now()->addDays(10 + $i * 5),
                         'start_date' => Carbon::now()->addDays(20 + $i * 5),

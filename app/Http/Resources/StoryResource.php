@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,12 +13,12 @@ class StoryResource extends JsonResource
         return [
             'id' => $this->id,
             'body' => $this->body,
-            'image' => $this->image ? asset('storage/'.$this->image) : null,
+            'image' => Media::url($this->image),
             'created_at' => $this->created_at,
             'author' => $this->whenLoaded('user', fn () => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
-                'avatar' => $this->user->avatar ? asset('storage/'.$this->user->avatar) : null,
+                'avatar' => Media::url($this->user->avatar),
                 'city' => $this->user->city,
             ]),
             'call' => $this->whenLoaded('call', fn () => [

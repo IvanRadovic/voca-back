@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,7 @@ class CallResource extends JsonResource
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'description' => $this->description,
-            'image' => $this->image ? asset('storage/'.$this->image) : null,
+            'image' => Media::url($this->image),
             'type' => $this->type,
             'application_deadline' => $this->application_deadline,
             'start_date' => $this->start_date,

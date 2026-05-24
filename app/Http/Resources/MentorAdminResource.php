@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class MentorAdminResource extends JsonResource
             'bio' => $this->bio,
             'bio_en' => $this->bio_en,
             'expertise' => $this->expertise,
-            'avatar' => $this->avatar ? asset('storage/'.$this->avatar) : null,
+            'avatar' => Media::url($this->avatar),
             'email' => $this->email,
             'linkedin' => $this->linkedin,
             'is_active' => (bool) $this->is_active,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,7 +32,7 @@ class ApplicationResource extends JsonResource
                     'skills' => $this->user->skills,
                     'linkedin' => $this->user->linkedin,
                     'phone' => $this->user->phone,
-                    'avatar' => $this->user->avatar ? asset('storage/'.$this->user->avatar) : null,
+                    'avatar' => Media::url($this->user->avatar),
                     'interests' => CategoryResource::collection(
                         $this->user->relationLoaded('interests') ? $this->user->interests : collect()
                     ),

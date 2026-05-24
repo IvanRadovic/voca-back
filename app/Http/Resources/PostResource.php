@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class PostResource extends JsonResource
             'excerpt_en' => $this->excerpt_en,
             'body' => $this->body,
             'body_en' => $this->body_en,
-            'cover_image' => $this->cover_image ? asset('storage/'.$this->cover_image) : null,
+            'cover_image' => Media::url($this->cover_image),
             'published_at' => $this->published_at,
             'author' => $this->whenLoaded('author', fn () => [
                 'id' => $this->author->id,

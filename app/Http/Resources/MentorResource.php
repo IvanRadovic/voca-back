@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Call;
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -28,7 +29,7 @@ class MentorResource extends JsonResource
             'expertise' => $this->expertise
                 ? array_values(array_filter(array_map('trim', explode(',', $this->expertise))))
                 : [],
-            'avatar' => $this->avatar ? asset('storage/'.$this->avatar) : null,
+            'avatar' => Media::url($this->avatar),
             'linkedin' => $this->linkedin,
             'rating' => $feedbacks->count() ? round($feedbacks->avg('rating'), 1) : null,
             'reviews_count' => $feedbacks->count(),

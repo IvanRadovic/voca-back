@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class UserResource extends JsonResource
             'date_of_birth' => optional($this->date_of_birth)->toDateString(),
             'city' => $this->city,
             'education_level' => $this->education_level,
-            'avatar' => $this->avatar ? asset('storage/'.$this->avatar) : null,
+            'avatar' => Media::url($this->avatar),
             'bio' => $this->bio,
             'headline' => $this->headline,
             'about' => $this->about,

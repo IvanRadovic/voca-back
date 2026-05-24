@@ -25,6 +25,23 @@ class ContentSeeder extends Seeder
             return;
         }
 
+        $img = fn (string $id) => "https://images.unsplash.com/photo-{$id}?auto=format&fit=crop&w=1200&h=675&q=70";
+
+        // Topical cover photos, one per post in the order below.
+        $covers = [
+            $img('1455390582262-044cdead277a'), // CV - notebook
+            $img('1517245386807-bb43f82c33c4'), // motivation letter - desk
+            $img('1488646953014-85cb44e25828'), // Erasmus+ - travel
+            $img('1497032205916-ac775f0649ae'), // interview - office
+            $img('1481627834876-b7833e8f5570'), // scholarships - books
+            $img('1460925895917-afdab827c52f'), // LinkedIn - analytics
+            $img('1504280390367-361c6d9f38f4'), // summer camps
+            $img('1556761175-b413da4baf72'),    // workshop
+            $img('1507537297725-24a1c029d3ca'), // skills - growth
+            $img('1593113598332-cd288d649433'), // volunteering
+            $img('1522071820081-009f0129c71c'), // idea to project - startup
+        ];
+
         $posts = [
             // ---------- Resources ----------
             [
@@ -142,6 +159,7 @@ class ContentSeeder extends Seeder
                     'excerpt_en' => $p['excerpt_en'],
                     'body' => $p['body'],
                     'body_en' => $p['body_en'],
+                    'cover_image' => $covers[$i] ?? null,
                     'published_at' => now()->subDays($i),
                 ]
             );
