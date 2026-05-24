@@ -13,9 +13,12 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'type' => $this->type,
             'title' => $this->title,
+            'title_en' => $this->title_en,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
+            'excerpt_en' => $this->excerpt_en,
             'body' => $this->body,
+            'body_en' => $this->body_en,
             'cover_image' => $this->cover_image ? asset('storage/'.$this->cover_image) : null,
             'published_at' => $this->published_at,
             'author' => $this->whenLoaded('author', fn () => [

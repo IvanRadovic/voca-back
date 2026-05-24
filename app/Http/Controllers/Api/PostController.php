@@ -109,8 +109,11 @@ class PostController extends Controller
         return $request->validate([
             'type' => [$required, Rule::in(Post::TYPES)],
             'title' => [$required, 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string', 'max:300'],
+            'excerpt_en' => ['nullable', 'string', 'max:300'],
             'body' => [$required, 'string'],
+            'body_en' => ['nullable', 'string'],
             'cover_image' => ['nullable', 'image', 'max:5120'],
             'published' => ['sometimes', 'boolean'],
         ]);

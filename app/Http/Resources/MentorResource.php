@@ -13,7 +13,9 @@ class MentorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'title' => $this->title,
+            'title_en' => $this->title_en,
             'bio' => $this->bio,
+            'bio_en' => $this->bio_en,
             'expertise' => $this->expertise
                 ? array_values(array_filter(array_map('trim', explode(',', $this->expertise))))
                 : [],

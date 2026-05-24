@@ -133,7 +133,9 @@ class MentorController extends Controller
         return $request->validate([
             'name' => [$required, 'string', 'max:255'],
             'title' => [$required, 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:2000'],
+            'bio_en' => ['nullable', 'string', 'max:2000'],
             'expertise' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
             'linkedin' => ['nullable', 'url', 'max:255'],

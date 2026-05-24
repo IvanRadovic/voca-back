@@ -15,9 +15,12 @@ class Post extends Model
         'author_id',
         'type',
         'title',
+        'title_en',
         'slug',
         'excerpt',
+        'excerpt_en',
         'body',
+        'body_en',
         'cover_image',
         'published_at',
     ];

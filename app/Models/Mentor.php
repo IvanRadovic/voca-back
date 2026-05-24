@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Mentor extends Model
 {
     protected $fillable = [
-        'name', 'title', 'bio', 'expertise', 'avatar', 'email', 'linkedin', 'is_active',
+        'name', 'title', 'title_en', 'bio', 'bio_en', 'expertise', 'avatar', 'email', 'linkedin', 'is_active',
     ];
 
     protected function casts(): array
