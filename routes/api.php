@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CertificateController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\GamificationController;
+use App\Http\Controllers\Api\MentorController;
 use App\Http\Controllers\Api\NvoController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
@@ -46,6 +47,9 @@ Route::get('/stories/recent', [StoryController::class, 'recent']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 
+Route::get('/mentors', [MentorController::class, 'index']);
+Route::get('/mentors/{mentor}', [MentorController::class, 'show']);
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated routes
@@ -77,6 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my/stories', [StoryController::class, 'mine']);
     Route::post('/calls/{call}/stories', [StoryController::class, 'store']);
     Route::get('/me/gamification', [GamificationController::class, 'me']);
+    Route::post('/mentors/{mentor}/request', [MentorController::class, 'requestSession']);
 
     // AI assistant
     Route::post('/ai/cover-letter', [AssistantController::class, 'coverLetter']);

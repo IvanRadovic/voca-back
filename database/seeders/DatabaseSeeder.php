@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Certificate;
 use App\Models\Story;
 use App\Models\Feedback;
+use App\Models\Mentor;
 use App\Models\Nvo;
 use App\Models\Post;
 use App\Models\User;
@@ -272,6 +273,26 @@ class DatabaseSeeder extends Seeder
                     ]
                 );
             }
+        }
+
+        // ---- Mentors ----
+        $mentors = [
+            ['name' => 'Milena Đukanović', 'title' => 'Software Engineer', 'expertise' => 'IT, Programming, Career', 'bio' => 'Senior engineer happy to guide students entering tech.'],
+            ['name' => 'Nikola Vujović', 'title' => 'Startup Founder', 'expertise' => 'Entrepreneurship, Business, Product', 'bio' => 'Built two startups; mentors young founders on ideas and MVPs.'],
+            ['name' => 'Sara Popović', 'title' => 'Marketing Lead', 'expertise' => 'Marketing, Design, Branding', 'bio' => 'Helps young people break into marketing and personal branding.'],
+            ['name' => 'Ivan Marković', 'title' => 'NGO Program Manager', 'expertise' => 'Volunteering, Ecology, Projects', 'bio' => 'Guides volunteers and project leaders across the region.'],
+        ];
+        foreach ($mentors as $m) {
+            Mentor::updateOrCreate(
+                ['name' => $m['name']],
+                [
+                    'title' => $m['title'],
+                    'expertise' => $m['expertise'],
+                    'bio' => $m['bio'],
+                    'linkedin' => 'https://www.linkedin.com/in/example',
+                    'is_active' => true,
+                ]
+            );
         }
     }
 }
