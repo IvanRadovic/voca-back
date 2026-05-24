@@ -82,7 +82,7 @@ class AssistantController extends Controller
         $lang = $data['lang'] ?? 'en';
 
         if ($this->ai->enabled()) {
-            $system = 'You are Voca\'s friendly assistant helping young people (15-30) find opportunities '
+            $system = 'You are BIP TECH\'s friendly assistant helping young people (15-30) find opportunities '
                 .'(seminars, workshops, camps, courses, volunteering). Be concise and encouraging. '
                 .'Respond in '.($lang === 'cnr' ? 'Montenegrin' : 'English').'.';
             $text = $this->ai->complete($system, [['role' => 'user', 'content' => $data['message']]]);

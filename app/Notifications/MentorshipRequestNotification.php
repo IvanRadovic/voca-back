@@ -24,7 +24,7 @@ class MentorshipRequestNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('New mentorship request via Voca')
+            ->subject('New mentorship request via BIP TECH')
             ->line($this->requester->name.' would like a mentoring conversation.')
             ->line('Message: '.$this->body)
             ->line('Reply to: '.$this->requester->email);

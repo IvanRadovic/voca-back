@@ -19,11 +19,11 @@ class WelcomeNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Welcome to Voca')
+            ->subject('Welcome to BIP TECH')
             ->greeting('Welcome, '.$notifiable->name.'!')
             ->line('Your account has been created successfully.')
             ->line('Discover seminars, workshops, camps and more tailored to your interests.')
             ->action('Browse opportunities', config('app.frontend_url').'/calls')
-            ->line('Thank you for joining Voca!');
+            ->line('Thank you for joining BIP TECH!');
     }
 }

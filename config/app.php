@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Voca'),
+    'name' => env('APP_NAME', 'BIP TECH'),
 
     // URL of the React frontend, used in notification links.
     'frontend_url' => env('FRONTEND_URL', 'http://localhost:5173'),
