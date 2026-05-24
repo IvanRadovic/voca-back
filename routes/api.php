@@ -48,6 +48,7 @@ Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 
 Route::get('/mentors', [MentorController::class, 'index']);
+Route::post('/mentors/apply', [MentorController::class, 'apply']);
 Route::get('/mentors/{mentor}', [MentorController::class, 'show']);
 
 /*
@@ -82,6 +83,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/calls/{call}/stories', [StoryController::class, 'store']);
     Route::get('/me/gamification', [GamificationController::class, 'me']);
     Route::post('/mentors/{mentor}/request', [MentorController::class, 'requestSession']);
+
+    // Admin: mentor management
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/mentors', [MentorController::class, 'adminIndex']);
+        Route::post('/admin/mentors', [MentorController::class, 'store']);
+        Route::post('/admin/mentors/{mentor}', [MentorController::class, 'update']); // multipart
+        Route::put('/admin/mentors/{mentor}', [MentorController::class, 'update']);
+        Route::delete('/admin/mentors/{mentor}', [MentorController::class, 'destroy']);
+    });
 
     // AI assistant
     Route::post('/ai/cover-letter', [AssistantController::class, 'coverLetter']);
