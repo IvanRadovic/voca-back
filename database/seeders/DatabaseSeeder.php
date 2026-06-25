@@ -43,11 +43,11 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Tech Youth Hub',
                 'email' => 'nvo@voca.test',
-                'organization' => 'Tech Youth Hub',
+                'organization' => 'Centar za mlade i tehnologiju',
                 'calls' => [
                     [
-                        'title' => 'Web Development Bootcamp',
-                        'subtitle' => 'Learn React & Laravel in 6 weeks',
+                        'title' => 'Bootcamp za web development',
+                        'subtitle' => 'Nauči React i Laravel za 6 nedjelja',
                         'type' => 'course',
                         'cats' => ['it', 'programming', 'design'],
                         'is_online' => true,
@@ -56,35 +56,35 @@ class DatabaseSeeder extends Seeder
                         'image' => $img('1461749280684-dccba630e2f6'),
                     ],
                     [
-                        'title' => 'Startup Weekend Podgorica',
-                        'subtitle' => 'Build an MVP in 54 hours',
+                        'title' => 'Startup vikend Podgorica',
+                        'subtitle' => 'Napravi MVP za 54 sata',
                         'type' => 'competition',
                         'cats' => ['entrepreneurship', 'business', 'it'],
                         'is_online' => false,
-                        'location' => 'Podgorica, Montenegro',
+                        'location' => 'Podgorica, Crna Gora',
                         'price' => 15,
                         'image' => $img('1522071820081-009f0129c71c'),
                     ],
                 ],
             ],
             [
-                'name' => 'Green Future NGO',
+                'name' => 'Zelena Budućnost',
                 'email' => 'green@voca.test',
-                'organization' => 'Green Future NGO',
+                'organization' => 'Zelena Budućnost',
                 'calls' => [
                     [
-                        'title' => 'Coastal Clean-up Camp',
-                        'subtitle' => 'A week of volunteering by the sea',
+                        'title' => 'Kamp za čišćenje primorja',
+                        'subtitle' => 'Nedjelja volontiranja na obali',
                         'type' => 'camp',
                         'cats' => ['ecology', 'volunteering', 'travel'],
                         'is_online' => false,
-                        'location' => 'Ulcinj, Montenegro',
+                        'location' => 'Ulcinj, Crna Gora',
                         'price' => 0,
                         'image' => $img('1618477388954-7852f32655ec'),
                     ],
                     [
-                        'title' => 'Sustainability Seminar',
-                        'subtitle' => 'Climate action for young leaders',
+                        'title' => 'Seminar o održivosti',
+                        'subtitle' => 'Klimatska akcija za mlade lidere',
                         'type' => 'seminar',
                         'cats' => ['ecology', 'personal-development'],
                         'is_online' => true,
@@ -95,23 +95,23 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Creative Arts Collective',
+                'name' => 'Kolektiv kreativnih umjetnosti',
                 'email' => 'arts@voca.test',
-                'organization' => 'Creative Arts Collective',
+                'organization' => 'Kolektiv kreativnih umjetnosti',
                 'calls' => [
                     [
-                        'title' => 'Photography Workshop',
-                        'subtitle' => 'Master natural light portraits',
+                        'title' => 'Radionica fotografije',
+                        'subtitle' => 'Ovladaj portretima u prirodnom svjetlu',
                         'type' => 'workshop',
                         'cats' => ['photography', 'art', 'design'],
                         'is_online' => false,
-                        'location' => 'Kotor, Montenegro',
+                        'location' => 'Kotor, Crna Gora',
                         'price' => 25,
                         'image' => $img('1452587925148-ce544e77e70d'),
                     ],
                     [
-                        'title' => 'Creative Writing Mentorship',
-                        'subtitle' => '3-month guided program',
+                        'title' => 'Mentorstvo kreativnog pisanja',
+                        'subtitle' => 'Tromjesečni vođeni program',
                         'type' => 'mentorship',
                         'cats' => ['writing', 'art', 'personal-development'],
                         'is_online' => true,
@@ -141,8 +141,8 @@ class DatabaseSeeder extends Seeder
                 [
                     'organization_name' => $blueprint['organization'],
                     'website' => 'https://example.org',
-                    'description' => 'We empower young people through hands-on opportunities.',
-                    'intro_message' => 'Welcome to '.$blueprint['organization'].'! Explore our open calls below.',
+                    'description' => 'Osnažujemo mlade kroz praktične prilike.',
+                    'intro_message' => 'Dobrodošli u '.$blueprint['organization'].'! Pogledaj naše otvorene pozive ispod.',
                     'verified' => true,
                 ]
             );
@@ -152,7 +152,7 @@ class DatabaseSeeder extends Seeder
                     ['user_id' => $nvoUser->id, 'title' => $c['title']],
                     [
                         'subtitle' => $c['subtitle'],
-                        'description' => "<p>{$c['subtitle']}.</p><p>This opportunity is open to motivated young people aged 15-30. Limited spots available, so apply early!</p><ul><li>Hands-on sessions</li><li>Certificate of participation</li><li>Networking with peers</li></ul>",
+                        'description' => "<p>{$c['subtitle']}.</p><p>Ova prilika je otvorena za motivisane mlade od 15 do 30 godina. Broj mjesta je ograničen, prijavi se rano!</p><ul><li>Praktične sesije</li><li>Sertifikat o učešću</li><li>Umrežavanje sa vršnjacima</li></ul>",
                         'image' => $c['image'] ?? null,
                         'type' => $c['type'],
                         'application_deadline' => Carbon::now()->addDays(10 + $i * 5),
@@ -205,11 +205,11 @@ class DatabaseSeeder extends Seeder
                     'date_of_birth' => Carbon::now()->subYears(rand(16, 29)),
                     'education_level' => collect(['high_school', 'undergraduate', 'bachelor', 'master'])->random(),
                     'gender' => collect(['male', 'female', 'undisclosed'])->random(),
-                    'headline' => 'Motivated young person from '.$y['city'],
-                    'about' => 'I am passionate about learning new things and contributing to my community. Always looking for opportunities to grow.',
-                    'education' => 'Faculty of Social Sciences, University of Montenegro (ongoing).',
-                    'work_experience' => 'Volunteer at a local youth center; part-time internship in a small team.',
-                    'skills' => 'Teamwork, communication, English (B2), basic project management.',
+                    'headline' => 'Motivisana mlada osoba iz grada '.$y['city'],
+                    'about' => 'Strastveno učim nove stvari i doprinosim svojoj zajednici. Uvijek u potrazi za prilikama za rast.',
+                    'education' => 'Fakultet političkih nauka, Univerzitet Crne Gore (u toku).',
+                    'work_experience' => 'Volonter u lokalnom omladinskom centru; part-time praksa u malom timu.',
+                    'skills' => 'Timski rad, komunikacija, engleski (B2), osnovno upravljanje projektima.',
                     'linkedin' => 'https://www.linkedin.com/in/example',
                     'email_verified_at' => now(),
                 ]
@@ -251,7 +251,7 @@ class DatabaseSeeder extends Seeder
 
             Feedback::updateOrCreate(
                 ['call_id' => $finishedCall->id, 'user_id' => $youth->id],
-                ['rating' => rand(4, 5), 'comment' => 'Great experience, learned a lot and met amazing people!']
+                ['rating' => rand(4, 5), 'comment' => 'Odlično iskustvo, naučio sam puno i upoznao divne ljude!']
             );
         }
 
