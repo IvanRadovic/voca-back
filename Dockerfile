@@ -1,5 +1,5 @@
 # =========================================================
-# Laravel API - Production Dockerfile (PHP 8.2 FPM + Nginx)
+# Laravel API - Production Dockerfile (PHP 8.4 FPM + Nginx)
 # Runs PHP-FPM, Nginx and the queue worker via supervisord on port 80.
 # Designed to be built and deployed from Coolify directly.
 # =========================================================
@@ -14,7 +14,7 @@ RUN composer install \
     --no-scripts \
     --optimize-autoloader
 
-FROM php:8.2-fpm-alpine AS app
+FROM php:8.4-fpm-alpine AS app
 
 ENV APP_ENV=production \
     APP_DEBUG=false
