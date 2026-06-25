@@ -1,0 +1,71 @@
+# Local development only. Coolify builds the Dockerfile directly and ignores
+# this file. Spin the stack up with `docker compose up`.
+#
+# Typical first-run:
+#   docker compose run --rm app composer install
+#   docker compose run --rm app php artisan key:generate
+#   docker compose up
+#   docker compose exec app php artisan migrate --seed
+#
+# API:     http://localhost:8000
+# Adminer: http://localhost:8081  (server=db, user=voca, pass=secret)
+
+services:
+  app:
+    build:
+      context: .
+    image: bip-tech/api:dev
+    ports:
+      - "8000:80"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: ${APP_KEY:-base64:Zm9yLWxvY2FsLWRldi1vbmx5LWRvLW5vdC11c2UtaW4tcHJvZA==}
+      APP_URL: http://localhost:8000
+      FRONTEND_URL: http://localhost:5173
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: voca
+      DB_USERNAME: voca
+      DB_PASSWORD: secret
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: database
+      CACHE_STORE: database
+      MAIL_MAILER: log
+      SANCTUM_STATEFUL_DOMAINS: localhost:5173,127.0.0.1:5173
+      RUN_MIGRATIONS: "true"
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"   # host 3307 to avoid clashing with a local MySQL
+    environment:
+      MYSQL_DATABASE: voca
+      MYSQL_USER: voca
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-uvoca", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+volumes:
+  mysql-data:
+  vendor:
