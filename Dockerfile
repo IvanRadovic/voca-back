@@ -1,6 +1,7 @@
 # =========================================================
 # Laravel API - Production Dockerfile (PHP 8.2 FPM + Nginx)
-# Runs PHP-FPM and Nginx via supervisord on port 80.
+# Runs PHP-FPM, Nginx and the queue worker via supervisord on port 80.
+# Designed to be built and deployed from Coolify directly.
 # =========================================================
 
 FROM composer:2 AS vendor
@@ -43,9 +44,14 @@ WORKDIR /var/www/html
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
-RUN mkdir -p storage/logs bootstrap/cache \
+# Run package discovery now that the full app is present (vendor stage used
+# --no-scripts so service providers from Sanctum / dompdf / etc. weren't
+# registered in bootstrap/cache/packages.php).
+RUN php artisan package:discover --ansi
+
+RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 storage bootstrap/cache storage/logs
+    && chmod -R 775 storage bootstrap/cache
 
 RUN printf '%s\n' \
 'server {' \
@@ -69,6 +75,8 @@ RUN printf '%s\n' \
 '[supervisord]' \
 'nodaemon=true' \
 'user=root' \
+'logfile=/dev/null' \
+'logfile_maxbytes=0' \
 '' \
 '[program:php-fpm]' \
 'command=php-fpm -F' \
@@ -84,11 +92,25 @@ RUN printf '%s\n' \
 'stdout_logfile=/dev/stdout' \
 'stdout_logfile_maxbytes=0' \
 'stderr_logfile=/dev/stderr' \
+'stderr_logfile_maxbytes=0' \
+'' \
+'[program:queue-worker]' \
+'command=php /var/www/html/artisan queue:work --tries=3 --max-time=3600 --sleep=3 --backoff=10' \
+'user=www-data' \
+'autorestart=true' \
+'stopwaitsecs=60' \
+'stdout_logfile=/dev/stdout' \
+'stdout_logfile_maxbytes=0' \
+'stderr_logfile=/dev/stderr' \
 'stderr_logfile_maxbytes=0' > /etc/supervisord.conf
 
-RUN printf '#!/bin/sh\nset -eu\n\nif [ -f /var/www/html/.env ]; then\n  php artisan config:cache\n  php artisan route:cache\n  php artisan view:cache\nelse\n  echo "No .env file found; skipping Laravel cache warmup."\nfi\n\nif [ "${RUN_MIGRATIONS:-false}" = "true" ]; then\n  php artisan migrate --force\nfi\n\nexec /usr/bin/supervisord -c /etc/supervisord.conf\n' > /entrypoint.sh \
-    && chmod +x /entrypoint.sh
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
+
+# Laravel 11 ships a built-in health endpoint at /up.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -fsS http://127.0.0.1/up || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
