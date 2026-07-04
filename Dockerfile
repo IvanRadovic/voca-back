@@ -57,6 +57,7 @@ RUN printf '%s\n' \
 'server {' \
 '    listen 80;' \
 '    server_tokens off;' \
+'    fastcgi_hide_header X-Powered-By;' \   
 '    client_max_body_size 20m;' \
 '    index index.php index.html;' \
 '    root /var/www/html/public;' \
