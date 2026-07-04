@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'nvo' => \App\Http\Middleware\EnsureUserIsNvo::class,
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
+        
+         $middleware->api(append: [
+        \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+    ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
