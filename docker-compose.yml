@@ -16,7 +16,7 @@ services:
       context: .
     image: bip-tech/api:dev
     ports:
-      - "8000:80"
+      - "127.0.0.1:8000:80"
     environment:
       APP_ENV: local
       APP_DEBUG: "true"
@@ -45,7 +45,7 @@ services:
   db:
     image: mysql:8.0
     ports:
-      - "3307:3306"   # host 3307 to avoid clashing with a local MySQL
+      - "127.0.0.1:3307:3306"   # host 3307 to avoid clashing with a local MySQL
     environment:
       MYSQL_DATABASE: voca
       MYSQL_USER: voca
@@ -62,7 +62,7 @@ services:
   adminer:
     image: adminer:latest
     ports:
-      - "8081:8080"
+      - "127.0.0.1:8081:8080"
     depends_on:
       - db
 
