@@ -7,6 +7,9 @@ storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
 storage/logs/*
+# Package and config caches from a local `composer install` (with dev
+# dependencies) would override the ones the image builds without them.
+bootstrap/cache/*.php
 .env
 .env.*
 Dockerfile*
