@@ -14,7 +14,10 @@ RUN composer install \
     --no-scripts \
     --optimize-autoloader
 
-FROM php:8.4-fpm-alpine AS app
+# Patch version pinned: a floating `8.4` tag can resolve to a cached,
+# vulnerable image on rebuild. 8.4.27 fixes CVE-2026-109618 and
+# CVE-2026-109619 (unauthenticated RCE in PHP-FPM, 2026-10-21).
+FROM php:8.4.27-fpm-alpine AS app
 
 ENV APP_ENV=production \
     APP_DEBUG=false
